@@ -1,25 +1,37 @@
-import { TasksToDo } from '../TasksToDo'
-import styles from './tasks.module.css'
+import { ITask } from "../../App";
+import { Task } from "../Task";
+import styles from "./tasks.module.css";
 
-export function Tasks() {
-    return (
-        <section className={styles.tasks}>
-            <header className={styles.header}>
-                <div>
-                    <p>Tarefas criadas</p>
-                    <span>10</span>
-                </div>
+interface Props {
+  tasks: ITask[];
+  onDelete: (taskId: string) => void;
+}
 
-                <div>
-                    <p className={styles.textP}>Concluidas</p>
-                    <span>2 de 10</span>
-                </div>
-            </header>
+export function Tasks({ tasks, onDelete }: Props) {
+  const tasksQuantity = tasks.length;
+  const completedTasks = tasks.filter((task) => task.isCompleted).length;
 
-            <div className={styles.list}>
-                <TasksToDo />
-                <TasksToDo />
-            </div>
-        </section>
-    )
+  return (
+    <section className={styles.tasks}>
+      <header className={styles.header}>
+        <div>
+          <p>Tarefas criadas</p>
+          <span>{tasksQuantity}</span>
+        </div>
+
+        <div>
+          <p className={styles.textP}>Concluidas</p>
+          <span>
+            {completedTasks} de {tasksQuantity}
+          </span>
+        </div>
+      </header>
+
+      <div className={styles.list}>
+        {tasks.map((task) => (
+          <Task key={task.id} task={task} onDelete={onDelete}/>
+        ))}
+      </div>
+    </section>
+  );
 }
